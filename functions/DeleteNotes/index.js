@@ -12,16 +12,18 @@ async function deleteNote(id) {
     .promise();
 }
 
-const handler = middy()(async (event) => {
-  try {
-    const { id } = event.pathParameters;
+const handler = middy()
+  .handler(async (event) => {
+    try {
+      const { id } = event.pathParameters;
 
-    await deleteNote(id);
+      await deleteNote(id);
 
-    return sendResponse(200, { message: "Note deleted successfully!" });
-  } catch (error) {
-    return sendError(500, error.message);
-  }
-}).use(validateToken);
+      return sendResponse(200, { message: "Note deleted successfully!" });
+    } catch (error) {
+      return sendError(500, error.message);
+    }
+  })
+  .use(validateToken);
 
 module.exports = { handler };

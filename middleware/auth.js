@@ -1,25 +1,26 @@
-const jwt = require("jsonwebtoken");
+const { sendError } = require("../responses/index");
 
 const validateToken = {
   before: async (request) => {
     try {
       const token = request.event.headers.authorization.replace("Bearer ", "");
 
-      if (!token) throw new Error();
+      console.log("Extracted token:", token);
+      if (!token) throw new Error("Token not provided");
 
       const data = jwt.verify(token, "a1b1c1");
       request.event.id = data.id;
       request.event.username = data.username;
-
-      return request.response;
     } catch (error) {
-      request.event.error = "401";
-      return request.response;
+      throw new Error("401 Unauthorized");
     }
   },
   onError: async (request) => {
-    request.event.error = "401";
-    return request.response;
+    if (request.error.message === "401 Unauthorized") {
+      return sendError(401, "Unauthorized");
+    }
+
+    throw request.error;
   },
 };
 

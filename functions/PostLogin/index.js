@@ -16,33 +16,27 @@ async function getUserByEmail(email) {
   return result.Items[0];
 }
 
-const handler = middy()
-  .handler(async (event) => {
-    try {
-      if (event?.error && event?.error === "401") {
-        return sendError(401, "Invalid token");
-      }
+const handler = middy().handler(async (event) => {
+  try {
+    const { email, password } = JSON.parse(event.body);
 
-      const { email, password } = JSON.parse(event.body);
+    const user = await getUserByEmail(email);
 
-      const user = await getUserByEmail(email);
-
-      if (!user) {
-        return sendError(404, "User not found");
-      }
-
-      const validPassword = await bcrypt.compare(password, user.password);
-
-      if (!validPassword) {
-        return sendError(401, "Invalid password");
-      }
-
-      const token = jwt.sign({ id: user.id }, "a1b1c1");
-      return sendResponse(200, { token });
-    } catch (error) {
-      return sendError(500, error.message);
+    if (!user) {
+      return sendError(404, "User not found");
     }
-  })
-  .use(validateToken);
+
+    const validPassword = await bcrypt.compare(password, user.password);
+
+    if (!validPassword) {
+      return sendError(401, "Invalid password");
+    }
+
+    const token = jwt.sign({ id: user.id }, "a1b1c1");
+    return sendResponse(200, { token });
+  } catch (error) {
+    return sendError(500, error.message);
+  }
+});
 
 module.exports = { handler };
