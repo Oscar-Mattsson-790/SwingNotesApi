@@ -37,7 +37,7 @@ const handler = middy()
         return sendError(401, "Invalid password");
       }
 
-      const token = jwt.sign({ userId: user.id }, "a1b1c1");
+      const token = jwt.sign({ id: user.id }, "a1b1c1");
       return sendResponse(200, { token });
     } catch (error) {
       return sendError(500, error.message);

@@ -1,5 +1,7 @@
+const { validateToken } = require("../../middleware/auth");
 const { sendResponse, sendError } = require("../../responses/index");
 const { db } = require("../../services/db");
+const middy = require("@middy/core");
 
 async function deleteNote(id) {
   await db
@@ -10,7 +12,7 @@ async function deleteNote(id) {
     .promise();
 }
 
-exports.handler = async (event) => {
+const handler = middy()(async (event) => {
   try {
     const { id } = event.pathParameters;
 
@@ -20,4 +22,6 @@ exports.handler = async (event) => {
   } catch (error) {
     return sendError(500, error.message);
   }
-};
+}).use(validateToken);
+
+module.exports = { handler };

@@ -1,5 +1,7 @@
+const middy = require("@middy/core");
 const { sendResponse, sendError } = require("../../responses/index");
 const { db } = require("../../services/db");
+const { validateToken } = require("../../middleware/auth");
 
 async function updateNote(id, title, text, modifiedAt) {
   await db
@@ -20,16 +22,20 @@ async function updateNote(id, title, text, modifiedAt) {
     .promise();
 }
 
-exports.handler = async (event) => {
-  try {
-    const { id } = event.pathParameters;
-    const { title, text } = JSON.parse(event.body);
-    const timestamp = new Date().toISOString();
+const handler = middy()
+  .handler(async (event) => {
+    try {
+      const { id } = event.pathParameters;
+      const { title, text } = JSON.parse(event.body);
+      const timestamp = new Date().toISOString();
 
-    await updateNote(id, title, text, timestamp);
+      await updateNote(id, title, text, timestamp);
 
-    return sendResponse(200, { message: "Note updated sucessfully" });
-  } catch (error) {
-    return sendError(500, error.message);
-  }
-};
+      return sendResponse(200, { message: "Note updated sucessfully" });
+    } catch (error) {
+      return sendError(500, error.message);
+    }
+  })
+  .use(validateToken);
+
+module.exports = { handler };
