@@ -19,7 +19,7 @@ const validateToken = {
   },
   onError: async (request) => {
     request.event.error = "401";
-    return request.resposne;
+    return request.response;
   },
 };
 
