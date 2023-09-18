@@ -1,3 +1,13 @@
+function sendResponse(code, response) {
+  return {
+    statusCode: code,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(response),
+  };
+}
+
 function sendError(statusCode, message) {
   return {
     statusCode,
@@ -8,14 +18,4 @@ function sendError(statusCode, message) {
   };
 }
 
-function sendResponse(response) {
-  return {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(response),
-  };
-}
-
-module.exports = { sendError, sendResponse };
+module.exports = { sendResponse, sendError };

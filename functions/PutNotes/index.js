@@ -7,7 +7,10 @@ async function updateNote(id, title, text, modifiedAt) {
       TableName: "Notes",
       Key: { id },
       UpdateExpression:
-        "set title = :title, text = :text, modifiedAt = :modifiedAt",
+        "set title = :title, #textAttribute = :text, modifiedAt = :modifiedAt",
+      ExpressionAttributeNames: {
+        "#textAttribute": "text",
+      },
       ExpressionAttributeValues: {
         ":title": title,
         ":text": text,
