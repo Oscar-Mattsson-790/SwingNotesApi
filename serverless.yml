@@ -1,0 +1,71 @@
+service: SwingNotesApi
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: ${env:PROFILE}
+  region: eu-north-1
+  iam:
+    role: ${env:LAMBDA_ROLE}
+  deploymentMethod: direct
+
+useDotenv: true
+
+plugins:
+  - serverless-webpack
+
+package:
+  individually: true
+
+functions:
+  GetNotes:
+    handler: functions/GetNotes/index.handler
+    events:
+      - httpApi:
+          path: /api/notes
+          method: GET
+  PostNotes:
+    handler: functions/PostNotes/index.handler
+    events:
+      - httpApi:
+          path: /api/notes
+          method: POST
+  PutNotes:
+    handler: functions/PutNotes/index.handler
+    events:
+      - httpApi:
+          path: /api/notes
+          method: PUT
+  DeleteNotes:
+    handler: functions/DeleteNotes/index.handler
+    events:
+      - httpApi:
+          path: /api/notes
+          method: DELETE
+  PostSignup:
+    handler: functions/PostSignup/index.handler
+    events:
+      - httpApi:
+          path: /api/user/signup
+          method: POST
+  PostLogin:
+    handler: functions/PostLogin/index.handler
+    events:
+      - httpApi:
+          path: /api/user/login
+          method: POST
+
+resources:
+  Resources:
+    NotesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Notes
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
