@@ -16,6 +16,7 @@
     "@middy/core": "^4.6.4",
     "aws-sdk": "^2.1459.0",
     "dotenv": "^16.3.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.0.1"
   }
 }
