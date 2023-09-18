@@ -2,6 +2,7 @@ const { sendResponse, sendError } = require("../../responses/index");
 const { db } = require("../../services/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { validateToken } = require("../../middleware/auth");
 
 async function getUserByEmail(email) {
   const result = await db
