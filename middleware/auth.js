@@ -1,4 +1,5 @@
 const { sendError } = require("../responses/index");
+const jwt = require("jsonwebtoken");
 
 const validateToken = {
   before: async (request) => {
