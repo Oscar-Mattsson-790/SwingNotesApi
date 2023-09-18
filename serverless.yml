@@ -35,13 +35,13 @@ functions:
     handler: functions/PutNotes/index.handler
     events:
       - httpApi:
-          path: /api/notes
+          path: /api/notes/{id}
           method: PUT
   DeleteNotes:
     handler: functions/DeleteNotes/index.handler
     events:
       - httpApi:
-          path: /api/notes
+          path: /api/notes/{id}
           method: DELETE
   PostSignup:
     handler: functions/PostSignup/index.handler
