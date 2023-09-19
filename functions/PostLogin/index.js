@@ -3,7 +3,6 @@ const { db } = require("../../services/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const middy = require("@middy/core");
-const { validateToken } = require("../../middleware/auth");
 
 async function getUserByEmail(email) {
   const result = await db
