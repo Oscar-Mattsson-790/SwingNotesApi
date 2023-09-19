@@ -23,12 +23,29 @@ async function createUser(email, password) {
   return user;
 }
 
+async function checkUserExists(email) {
+  const result = await db
+    .scan({
+      TableName: "Users",
+      FilterExpression: "email = :email",
+      ExpressionAttributeValues: { ":email": email },
+    })
+    .promise();
+
+  return result.Items && result.Items.length > 0;
+}
+
 exports.handler = async (event) => {
   try {
     const { email, password } = JSON.parse(event.body);
 
     if (!email || !password) {
       return sendError(400, "Email and password are required");
+    }
+
+    const userExists = await checkUserExists(email);
+    if (userExists) {
+      return sendError(400, "A user with this email already exists");
     }
 
     const newUser = await createUser(email, password);
