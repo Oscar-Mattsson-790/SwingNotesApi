@@ -26,6 +26,7 @@ async function createNote(title, text, createdAt, modifiedAt) {
 }
 
 const handler = middy()
+  .use(validateToken)
   .handler(async (event) => {
     try {
       const { title, text } = JSON.parse(event.body);
@@ -48,7 +49,6 @@ const handler = middy()
     } catch (error) {
       return sendError(500, error.message);
     }
-  })
-  .use(validateToken);
+  });
 
 module.exports = { handler };

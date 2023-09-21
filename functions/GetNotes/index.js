@@ -9,6 +9,7 @@ async function getNotes() {
 }
 
 const handler = middy()
+  .use(validateToken)
   .handler(async () => {
     try {
       const notes = await getNotes();
@@ -16,7 +17,6 @@ const handler = middy()
     } catch (error) {
       return sendError(500, error.message);
     }
-  })
-  .use(validateToken);
+  });
 
 module.exports = { handler };

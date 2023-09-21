@@ -13,6 +13,7 @@ async function deleteNote(id) {
 }
 
 const handler = middy()
+  .use(validateToken)
   .handler(async (event) => {
     try {
       const { id } = event.pathParameters;
@@ -23,7 +24,6 @@ const handler = middy()
     } catch (error) {
       return sendError(500, error.message);
     }
-  })
-  .use(validateToken);
+  });
 
 module.exports = { handler };
