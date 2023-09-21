@@ -27,7 +27,7 @@ const handler = middy()
     try {
       const { id } = event.pathParameters;
       const { title, text } = JSON.parse(event.body);
-      const timestamp = new Date().toLocaleDateString();
+      const timestamp = new Date().toISOString().slice(0, 10);
 
       await updateNote(id, title, text, timestamp);
 

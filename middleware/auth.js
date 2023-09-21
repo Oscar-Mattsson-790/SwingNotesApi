@@ -6,12 +6,10 @@ const validateToken = {
     try {
       const token = request.event.headers.authorization.replace("Bearer ", "");
 
-      console.log("Extracted token:", token);
       if (!token) throw new Error("Token not provided");
 
       const data = jwt.verify(token, "a1b1c1");
       request.event.id = data.id;
-      request.event.username = data.username;
     } catch (error) {
       throw new Error("401 Unauthorized");
     }

@@ -29,7 +29,7 @@ const handler = middy()
   .handler(async (event) => {
     try {
       const { title, text } = JSON.parse(event.body);
-      const timestamp = new Date().toLocaleDateString();
+      const timestamp = new Date().toISOString().slice(0, 10);
 
       if (!title || !text) {
         return sendError(400, "Title and text are required");
