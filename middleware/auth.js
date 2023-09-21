@@ -9,7 +9,7 @@ const validateToken = {
       if (!token) throw new Error("Token not provided");
 
       const data = jwt.verify(token, "a1b1c1");
-      request.event.id = data.id;
+      request.event.userId = data.id;
     } catch (error) {
       throw new Error("401 Unauthorized");
     }
