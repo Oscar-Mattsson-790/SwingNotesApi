@@ -35,6 +35,14 @@ const handler = middy()
         return sendError(400, "Title and text are required");
       }
 
+      if (title.length > 50) {
+        return sendError(400, "Title should not exceed 50 characters");
+      }
+
+      if (text.length > 300) {
+        return sendError(400, "Text should not exceed 300 characters");
+      }
+
       const newNote = await createNote(title, text, timestamp, timestamp);
       return sendResponse(200, newNote);
     } catch (error) {

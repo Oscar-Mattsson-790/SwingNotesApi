@@ -29,6 +29,14 @@ const handler = middy()
       const { title, text } = JSON.parse(event.body);
       const timestamp = new Date().toISOString().slice(0, 10);
 
+      if (title && title.length > 50) {
+        return sendError(400, "Title should not exceed 50 characters");
+      }
+
+      if (text && text.length > 300) {
+        return sendError(400, "text should not exceed 300 characters");
+      }
+
       await updateNote(id, title, text, timestamp);
 
       return sendResponse(200, { message: "Note updated sucessfully" });
